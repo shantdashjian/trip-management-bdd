@@ -21,3 +21,13 @@ Feature: Travelers Policy
     Given there is an business trip
     When we have a VIP traveler
     Then you can add him but cannot remove him from a business trip
+
+  Scenario: Premium trip, usual traveler
+    Given there is an premium trip
+    When we have a usual traveler
+    Then you cannot add or remove him from a premium trip
+
+  Scenario: Premium trip, VIP traveler
+    Given there is an premium trip
+    When we have a VIP traveler
+    Then you can add and remove him from a premium trip

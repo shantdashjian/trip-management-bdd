@@ -1,5 +1,6 @@
 package tripmanagement;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TravelersPolicy {
     private Trip economyTrip;
     private Trip businessTrip;
+    private Trip premiumTrip;
     private Traveler mike;
     private Traveler john;
 
@@ -75,6 +77,31 @@ public class TravelersPolicy {
                 () -> assertEquals(1, businessTrip.getTravelersList().size()),
                 () -> assertEquals(false, businessTrip.removeTraveler(john)),
                 () -> assertEquals(1, businessTrip.getTravelersList().size())
+        );
+    }
+
+    @Given("^there is an premium trip$")
+    public void thereIsAnPremiumTrip() throws Throwable {
+        premiumTrip = new PremiumTrip("3");
+    }
+
+    @Then("^you cannot add or remove him from a premium trip$")
+    public void youCannotAddOrRemoveHimFromAPremiumTrip() throws Throwable {
+        assertAll("Verify all conditions for a usual traveler and a premium trip",
+                () -> assertEquals(false, premiumTrip.addTraveler(mike)),
+                () -> assertEquals(0, premiumTrip.getTravelersList().size()),
+                () -> assertEquals(false, premiumTrip.removeTraveler(mike)),
+                () -> assertEquals(0, premiumTrip.getTravelersList().size())
+        );
+    }
+
+    @Then("^you can add and remove him from a premium trip$")
+    public void youCanAddAndRemoveHimFromAPremiumTrip() throws Throwable {
+        assertAll("Verify all conditions for a VIP traveler and a premium trip",
+                () -> assertEquals(true, premiumTrip.addTraveler(john)),
+                () -> assertEquals(1, premiumTrip.getTravelersList().size()),
+                () -> assertEquals(true, premiumTrip.removeTraveler(john)),
+                () -> assertEquals(0, premiumTrip.getTravelersList().size())
         );
     }
 }
